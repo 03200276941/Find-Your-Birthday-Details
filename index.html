@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find the Day of the Week</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 1s ease;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Find Your Birthday Details</h1>
+        <label for="date">Day of your birthday:</label>
+        <input type="number" id="date" placeholder="Enter day (1-31)" min="1" max="31" required>
+
+        <label for="month">Month of your birthday:</label>
+        <input type="number" id="month" placeholder="Enter month (1-12)" min="1" max="12" required>
+
+        <label for="year">Year of your birthday:</label>
+        <input type="number" id="year" placeholder="Enter year (e.g., 1990)" required>
+
+        <button onclick="calculateDetails()">Find Details</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function getDayOfWeek(date, month, year) {
+            const dateObject = new Date(year, month - 1, date);
+            const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            return weekdays[dateObject.getDay()];
+        }
+
+        function calculateDetails() {
+            let date = parseInt(document.getElementById('date').value);
+            let month = parseInt(document.getElementById('month').value);
+            let year = parseInt(document.getElementById('year').value);
+
+            if (isNaN(date) || isNaN(month) || isNaN(year) || date < 1 || month < 1 || year < 1) {
+                document.getElementById('result').innerText = "Please enter valid date, month, and year.";
+            } else {
+                let birthDate = new Date(year, month - 1, date);
+                let today = new Date();
+
+                // Calculate day of the week
+                let dayOfWeek = getDayOfWeek(date, month, year);
+
+                // Calculate the time difference in milliseconds
+                let diffInMs = today - birthDate;
+
+                // Convert time difference to various units
+                let seconds = Math.floor(diffInMs / 1000);
+                let minutes = Math.floor(seconds / 60);
+                let hours = Math.floor(minutes / 60);
+                let days = Math.floor(hours / 24);
+                let weeks = Math.floor(days / 7);
+                let months = Math.floor(days / 30.44); // Average days in a month
+                let years = Math.floor(days / 365.25); // Average days in a year
+
+                // Display results
+                document.getElementById('result').innerHTML = `
+                    Your birthday on ${date}/${month}/${year} fell on a <strong>${dayOfWeek}</strong>.<br>
+                    Time elapsed since then:<br>
+                    <strong>${years}</strong> years,<br>
+                    <strong>${months}</strong> months,<br>
+                    <strong>${weeks}</strong> weeks,<br>
+                    <strong>${days}</strong> days,<br>
+                    <strong>${hours}</strong> hours,<br>
+                    <strong>${minutes}</strong> minutes,<br>
+                    <strong>${seconds}</strong> seconds.
+                `;
+            }
+        }
+
+        function generateRandomHexColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Change the background color to a random hex color every time the page is loaded
+        document.body.style.backgroundColor = generateRandomHexColor();
+    </script>
+
+</body>
+</html>
